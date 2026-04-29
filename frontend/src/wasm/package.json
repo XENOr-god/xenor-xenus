@@ -1,0 +1,15 @@
+{
+  "name": "xenor-xenus",
+  "type": "module",
+  "version": "0.1.0",
+  "files": [
+    "xenor_xenus_bg.wasm",
+    "xenor_xenus.js",
+    "xenor_xenus.d.ts"
+  ],
+  "main": "xenor_xenus.js",
+  "types": "xenor_xenus.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}
