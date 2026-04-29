@@ -1,0 +1,97 @@
+/* Seed Input — Professional Console Redesign */
+
+.seed-input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px var(--pad-m);
+  background: transparent;
+  border-bottom: 1px solid var(--border);
+}
+
+.seed-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--primary-dim);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.seed-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border-active);
+  background: var(--bg-surface);
+}
+
+.seed-input-wrapper::before {
+  content: "⬡";
+  padding-left: 12px;
+  color: var(--primary-dim);
+  font-size: 14px;
+}
+
+.seed-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 13px;
+  padding: 10px 12px;
+  letter-spacing: 1px;
+  outline: none;
+}
+
+.seed-input::placeholder {
+  color: var(--text-dim);
+  opacity: 0.3;
+}
+
+.seed-input-wrapper::after {
+  content: "»";
+  padding-right: 12px;
+  color: var(--primary-dim);
+  font-size: 14px;
+}
+
+.seed-submit {
+  background: linear-gradient(135deg, var(--primary-dim) 0%, var(--primary) 100%);
+  border: none;
+  color: var(--bg);
+  font-family: var(--display);
+  font-size: 12px;
+  font-weight: 900;
+  padding: 12px;
+  cursor: pointer;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: all 0.2s;
+  clip-path: polygon(0 0, 95% 0, 100% 100%, 5% 100%);
+}
+
+.seed-submit:hover:not(:disabled) {
+  filter: brightness(1.2);
+  box-shadow: 0 0 20px var(--primary-glow);
+}
+
+.seed-submit:disabled {
+  opacity: 0.3;
+  background: var(--bg3);
+  color: var(--text-dim);
+  clip-path: none;
+}
+
+.seed-status {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+}

@@ -1,0 +1,87 @@
+/* Phase Indicator V2 — System Phase Track */
+
+.phase-indicator-v2 {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
+}
+
+.phase-label-v2 {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 2px;
+  white-space: nowrap;
+}
+
+.phase-track-v2 {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  height: 40px;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.phase-track-v2::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-50%);
+}
+
+.phase-progress-line-v2 {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  height: 2px;
+  background: var(--primary);
+  box-shadow: 0 0 10px var(--primary-glow);
+  transform: translateY(-50%);
+  transition: width 0.5s ease-in-out;
+  z-index: 1;
+}
+
+.phase-node-v2 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  gap: 8px;
+}
+
+.node-dot-v2 {
+  width: 6px;
+  height: 6px;
+  background: var(--bg-surface);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transform: rotate(45deg);
+  transition: all 0.3s;
+}
+
+.phase-node-v2.active .node-dot-v2 {
+  background: var(--primary);
+  border-color: var(--primary);
+  box-shadow: 0 0 10px var(--primary-glow);
+  transform: rotate(45deg) scale(1.5);
+}
+
+.node-label-v2 {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+  transition: all 0.3s;
+}
+
+.phase-node-v2.active .node-label-v2 {
+  color: var(--primary);
+  font-weight: bold;
+}

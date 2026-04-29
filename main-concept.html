@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XENOR-XENUS // GAME CONCEPT DOC</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #040A06;
+    --bg2: #070F09;
+    --bg3: #0A1A0D;
+    --green: #00FF41;
+    --green-dim: #00C431;
+    --green-dark: #006618;
+    --green-ghost: rgba(0,255,65,0.07);
+    --amber: #FFB800;
+    --amber-dim: #CC9200;
+    --red: #FF3333;
+    --cyan: #00FFCC;
+    --text: #B8D4BB;
+    --text-dim: #5A8A5E;
+    --border: rgba(0,255,65,0.15);
+    --border-bright: rgba(0,255,65,0.35);
+    --mono: 'Share Tech Mono', monospace;
+    --display: 'Orbitron', sans-serif;
+    --body: 'Exo 2', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--body);
+    font-size: 14px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* Scanline overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.05) 2px,
+      rgba(0,0,0,0.05) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 32px 80px;
+  }
+
+  /* HEADER */
+  .header {
+    border-bottom: 1px solid var(--border-bright);
+    padding: 40px 0 32px;
+    margin-bottom: 48px;
+    position: relative;
+  }
+
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 120px;
+    height: 2px;
+    background: var(--green);
+  }
+
+  .header-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--green-dim);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .header h1 {
+    font-family: var(--display);
+    font-size: 42px;
+    font-weight: 900;
+    color: var(--green);
+    letter-spacing: 4px;
+    line-height: 1.1;
+    text-shadow: 0 0 40px rgba(0,255,65,0.3);
+  }
+
+  .header h1 span { color: var(--amber); }
+
+  .header-sub {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-top: 10px;
+    letter-spacing: 1px;
+  }
+
+  .header-meta {
+    display: flex;
+    gap: 24px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+
+  .meta-pill {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 4px 12px;
+    border: 1px solid var(--border);
+    color: var(--green-dim);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  .meta-pill.amber { border-color: rgba(255,184,0,0.3); color: var(--amber-dim); }
+  .meta-pill.cyan { border-color: rgba(0,255,204,0.3); color: var(--cyan); opacity: 0.7; }
+
+  /* SECTION */
+  .section {
+    margin-bottom: 56px;
+  }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--green-dim);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .section-title {
+    font-family: var(--display);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--green);
+    letter-spacing: 2px;
+    margin-bottom: 24px;
+  }
+
+  /* OVERVIEW CARD */
+  .overview-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: var(--border);
+    border: 1px solid var(--border-bright);
+    margin-bottom: 32px;
+  }
+
+  .overview-cell {
+    background: var(--bg2);
+    padding: 20px 24px;
+  }
+
+  .overview-cell .label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .overview-cell .value {
+    font-family: var(--body);
+    font-size: 15px;
+    color: var(--text);
+    font-weight: 300;
+  }
+
+  .overview-cell .value strong {
+    color: var(--green);
+    font-weight: 600;
+  }
+
+  /* CONCEPT BLOCK */
+  .concept-block {
+    background: var(--bg2);
+    border-left: 3px solid var(--green);
+    padding: 20px 24px;
+    margin-bottom: 16px;
+  }
+
+  .concept-block p {
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.8;
+  }
+
+  .concept-block p strong { color: var(--green); font-weight: 600; }
+
+  /* MECHANIC CARDS */
+  .mechanic-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .mechanic-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .mechanic-card::before {
+    content: attr(data-num);
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    font-family: var(--display);
+    font-size: 48px;
+    font-weight: 900;
+    color: rgba(0,255,65,0.05);
+    line-height: 1;
+  }
+
+  .mechanic-card .card-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--green-dim);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .mechanic-card .card-title {
+    font-family: var(--display);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--green);
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+
+  .mechanic-card p {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  /* TECH STACK */
+  .tech-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--mono);
+    font-size: 13px;
+  }
+
+  .tech-table thead tr {
+    border-bottom: 1px solid var(--border-bright);
+  }
+
+  .tech-table th {
+    text-align: left;
+    padding: 10px 16px;
+    color: var(--green-dim);
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 400;
+  }
+
+  .tech-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  .tech-table tr:hover td { background: var(--green-ghost); }
+
+  .tech-table td:first-child { color: var(--text-dim); width: 160px; }
+  .tech-table td:nth-child(2) { color: var(--amber); }
+  .tech-table td:nth-child(3) { color: var(--text); }
+
+  /* ARCH DIAGRAM */
+  .arch-box {
+    border: 1px solid var(--border-bright);
+    background: var(--bg2);
+    margin-bottom: 16px;
+  }
+
+  .arch-header {
+    padding: 10px 20px;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--green-dim);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .arch-header .status {
+    font-size: 10px;
+    color: var(--green);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .status-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .arch-content {
+    padding: 20px;
+  }
+
+  .arch-layer {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 8px;
+    padding: 12px 16px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    position: relative;
+  }
+
+  .arch-layer-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    width: 80px;
+    flex-shrink: 0;
+    text-transform: uppercase;
+  }
+
+  .arch-components {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .arch-chip {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 4px 10px;
+    border: 1px solid;
+    letter-spacing: 1px;
+  }
+
+  .arch-chip.green { border-color: var(--green-dark); color: var(--green-dim); background: rgba(0,255,65,0.05); }
+  .arch-chip.amber { border-color: rgba(255,184,0,0.25); color: var(--amber-dim); background: rgba(255,184,0,0.04); }
+  .arch-chip.cyan { border-color: rgba(0,255,204,0.2); color: var(--cyan); opacity: 0.7; background: rgba(0,255,204,0.03); }
+  .arch-chip.red { border-color: rgba(255,51,51,0.25); color: #FF6666; background: rgba(255,51,51,0.04); }
+
+  .arch-arrow {
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    padding: 4px 0;
+    letter-spacing: 2px;
+  }
+
+  /* PHASE FLOW */
+  .phase-flow {
+    display: flex;
+    gap: 0;
+    margin: 24px 0;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  .phase-step {
+    flex-shrink: 0;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 16px;
+    width: 160px;
+    position: relative;
+  }
+
+  .phase-step + .phase-step {
+    border-left: none;
+  }
+
+  .phase-step::after {
+    content: '→';
+    position: absolute;
+    right: -14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--green-dim);
+    font-size: 16px;
+    z-index: 1;
+  }
+
+  .phase-step:last-child::after { display: none; }
+
+  .phase-num {
+    font-family: var(--display);
+    font-size: 24px;
+    font-weight: 900;
+    color: rgba(0,255,65,0.2);
+    margin-bottom: 4px;
+  }
+
+  .phase-name {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--green);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 6px;
+  }
+
+  .phase-desc {
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+
+  /* BUILDING TABLE */
+  .building-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin: 16px 0;
+  }
+
+  .building-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 16px;
+    text-align: center;
+  }
+
+  .building-icon {
+    font-size: 28px;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .building-name {
+    font-family: var(--display);
+    font-size: 10px;
+    color: var(--green);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .building-stat {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  /* ROADMAP */
+  .roadmap {
+    position: relative;
+    padding-left: 32px;
+  }
+
+  .roadmap::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--border);
+  }
+
+  .roadmap-item {
+    position: relative;
+    margin-bottom: 28px;
+  }
+
+  .roadmap-dot {
+    position: absolute;
+    left: -29px;
+    top: 4px;
+    width: 14px;
+    height: 14px;
+    border: 1px solid var(--green-dim);
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .roadmap-dot::after {
+    content: '';
+    width: 5px;
+    height: 5px;
+    background: var(--green);
+  }
+
+  .roadmap-dot.done { border-color: var(--green); background: var(--green-dark); }
+  .roadmap-dot.done::after { background: var(--green); }
+  .roadmap-dot.wip { border-color: var(--amber); }
+  .roadmap-dot.wip::after { background: var(--amber); }
+
+  .roadmap-phase {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .roadmap-title {
+    font-family: var(--display);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--green);
+    letter-spacing: 1.5px;
+    margin-bottom: 8px;
+  }
+
+  .task-list { list-style: none; }
+
+  .task-list li {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-dim);
+    padding: 3px 0;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .task-list li::before {
+    content: '├─';
+    color: var(--green-dark);
+    flex-shrink: 0;
+  }
+
+  .task-list li:last-child::before { content: '└─'; }
+
+  /* CODE BLOCK */
+  .code-block {
+    background: #020804;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--green-dark);
+    padding: 16px 20px;
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.7;
+    color: var(--green-dim);
+    overflow-x: auto;
+    margin: 12px 0;
+  }
+
+  .code-block .comment { color: #2A4A2E; }
+  .code-block .keyword { color: var(--amber-dim); }
+  .code-block .string { color: #5A9A60; }
+  .code-block .type { color: var(--cyan); opacity: 0.7; }
+
+  /* STAT ROW */
+  .stat-row {
+    display: flex;
+    gap: 2px;
+    background: var(--border);
+    margin: 24px 0;
+  }
+
+  .stat-box {
+    flex: 1;
+    background: var(--bg2);
+    padding: 20px;
+    text-align: center;
+  }
+
+  .stat-value {
+    font-family: var(--display);
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--green);
+    display: block;
+    text-shadow: 0 0 20px rgba(0,255,65,0.2);
+  }
+
+  .stat-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 4px;
+    display: block;
+  }
+
+  /* DIVIDER */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 40px 0;
+  }
+
+  /* FOOTER */
+  .footer {
+    margin-top: 64px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-brand {
+    font-family: var(--display);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--green);
+    letter-spacing: 3px;
+  }
+
+  .footer-info {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+  }
+
+  /* HIGHLIGHT */
+  .highlight-block {
+    border: 1px solid rgba(255,184,0,0.2);
+    background: rgba(255,184,0,0.03);
+    padding: 20px 24px;
+    margin: 20px 0;
+  }
+
+  .highlight-block .hl-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--amber-dim);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .highlight-block p {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  .highlight-block p strong { color: var(--amber); font-weight: 600; }
+
+  /* RESPONSIVE */
+  @media (max-width: 700px) {
+    .overview-grid { grid-template-columns: 1fr; }
+    .mechanic-grid { grid-template-columns: 1fr; }
+    .building-grid { grid-template-columns: repeat(2, 1fr); }
+    .header h1 { font-size: 28px; }
+    .phase-flow { gap: 8px; flex-wrap: wrap; }
+    .phase-step { width: calc(50% - 4px); }
+    .phase-step::after { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-tag">// GAME CONCEPT DOCUMENT — REV 1.0</div>
+    <h1>XENUS<span>_</span>SETTLEMENT</h1>
+    <div class="header-sub">MINI SETTLEMENT DEMO + SEED VISUALIZER // LANDING PAGE INTEGRATION</div>
+    <div class="header-meta">
+      <div class="meta-pill">STATUS: CONCEPT</div>
+      <div class="meta-pill amber">PLATFORM: WEB / WASM</div>
+      <div class="meta-pill cyan">STACK: RUST + TS + REACT</div>
+      <div class="meta-pill">RUNTIME: 60 FPS TARGET</div>
+    </div>
+  </div>
+
+  <!-- OVERVIEW -->
+  <div class="section">
+    <div class="section-label">01 // OVERVIEW</div>
+    <div class="section-title">GAME CONCEPT</div>
+
+    <div class="concept-block">
+      <p>
+        <strong>XENUS_SETTLEMENT</strong> adalah mini playable demo yang di-embed langsung di landing page <strong>xenor.xyz</strong>. Player membangun settlement kecil di atas grid deterministik — menempatkan bangunan, melihat fase eksekusi berjalan secara real-time, dan membuktikan bahwa <strong>seed yang sama selalu menghasilkan simulasi yang identik</strong>. Ini bukan game terpisah — ini adalah <strong>live showcase dari xenor-xenus itu sendiri.</strong>
+      </p>
+    </div>
+
+    <div class="overview-grid">
+      <div class="overview-cell">
+        <div class="label">Genre</div>
+        <div class="value"><strong>Deterministic City Builder</strong> / Idle Sim</div>
+      </div>
+      <div class="overview-cell">
+        <div class="label">Target Platform</div>
+        <div class="value"><strong>Browser (Web)</strong> — embed di landing page</div>
+      </div>
+      <div class="overview-cell">
+        <div class="label">Session Length</div>
+        <div class="value"><strong>2–5 menit</strong> — hook cepat, bisa ditinggal idle</div>
+      </div>
+      <div class="overview-cell">
+        <div class="label">Core Hook</div>
+        <div class="value"><strong>Seed Input</strong> — share seed, hasilkan city yang identik</div>
+      </div>
+      <div class="overview-cell">
+        <div class="label">Win Condition</div>
+        <div class="value">Capai <strong>PROTOCOL_ACTIVE</strong> level (resource threshold)</div>
+      </div>
+      <div class="overview-cell">
+        <div class="label">Relation to Xenus</div>
+        <div class="value"><strong>Live demo</strong> dari xenor-xenus via WASM export</div>
+      </div>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-box">
+        <span class="stat-value">~12×12</span>
+        <span class="stat-label">Grid Size</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-value">5</span>
+        <span class="stat-label">Phase Types</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-value">8</span>
+        <span class="stat-label">Building Types</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-value">u64</span>
+        <span class="stat-label">Seed Format</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CORE MECHANICS -->
+  <div class="section">
+    <div class="section-label">02 // MECHANICS</div>
+    <div class="section-title">CORE GAME LOOP</div>
+
+    <div class="mechanic-grid">
+      <div class="mechanic-card" data-num="01">
+        <div class="card-label">Mechanic 01</div>
+        <div class="card-title">SEED INPUT</div>
+        <p>Player input seed string (u64 atau text → hashed ke u64). Seed menentukan terrain awal, resource distribution, dan event schedule secara deterministik. Share seed = share world yang sama persis.</p>
+      </div>
+      <div class="mechanic-card" data-num="02">
+        <div class="card-label">Mechanic 02</div>
+        <div class="card-title">GRID PLACEMENT</div>
+        <p>Click-to-place bangunan di grid 12×12. Setiap cell memiliki terrain type (dari seed). Collision detection otomatis. Building adjacency memberikan bonus resource — mirror dari sistem di xenor-xenus.</p>
+      </div>
+      <div class="mechanic-card" data-num="03">
+        <div class="card-label">Mechanic 03</div>
+        <div class="card-title">PHASE TICK</div>
+        <p>Setiap N detik, satu siklus phase dijalankan: RESOURCE → PRODUCTION → POPULATION → EVENT → SNAPSHOT. Player bisa lihat tiap phase dalam progress bar realtime. Ini adalah xenor-xenus phase system secara live.</p>
+      </div>
+      <div class="mechanic-card" data-num="04">
+        <div class="card-label">Mechanic 04</div>
+        <div class="card-title">RESOURCE FLOW</div>
+        <p>3 resource utama: ENERGY, NODES, TOKENS. Tiap bangunan produce/consume resource berbeda. Balance = settlement tumbuh. Imbalance = degradation. Visual flow arrows antar bangunan.</p>
+      </div>
+      <div class="mechanic-card" data-num="05">
+        <div class="card-label">Mechanic 05</div>
+        <div class="card-title">DETERMINISM PROOF</div>
+        <p>Di corner layar: replay button yang reset simulasi ke tick 0 dengan seed yang sama. Hasilnya selalu identik — ini adalah demo live dari deterministic execution xenor protocol.</p>
+      </div>
+      <div class="mechanic-card" data-num="06">
+        <div class="card-label">Mechanic 06</div>
+        <div class="card-title">PROTOCOL UNLOCK</div>
+        <p>Saat settlement mencapai threshold tertentu, animasi "PROTOCOL_ACTIVE" muncul dan reveal CTA: "Explore full xenor-xenus →". Langsung convert curiosity jadi user acquisition.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE SYSTEM -->
+  <div class="section">
+    <div class="section-label">03 // PHASE SYSTEM</div>
+    <div class="section-title">EXECUTION CYCLE</div>
+
+    <div class="concept-block">
+      <p>Phase system di game langsung mirror dari <strong>xenor-xenus phase trait</strong>. Setiap tick cycle menjalankan 5 phase berurutan — deterministik, tidak bisa di-skip, urutan tidak bisa diubah. Ini adalah visualisasi live dari <code style="color:var(--green); font-family:var(--mono)">Phase::execute()</code> di Rust backend.</p>
+    </div>
+
+    <div class="phase-flow">
+      <div class="phase-step">
+        <div class="phase-num">01</div>
+        <div class="phase-name">RESOURCE</div>
+        <div class="phase-desc">Hitung resource production dari semua bangunan aktif</div>
+      </div>
+      <div class="phase-step">
+        <div class="phase-num">02</div>
+        <div class="phase-name">PRODUCTION</div>
+        <div class="phase-desc">Apply building output ke settlement resource pool</div>
+      </div>
+      <div class="phase-step">
+        <div class="phase-num">03</div>
+        <div class="phase-name">POPULATION</div>
+        <div class="phase-desc">Update population count berdasarkan housing + food</div>
+      </div>
+      <div class="phase-step">
+        <div class="phase-num">04</div>
+        <div class="phase-name">EVENT</div>
+        <div class="phase-desc">Jalankan seed-driven event (attack, discovery, bonus)</div>
+      </div>
+      <div class="phase-step">
+        <div class="phase-num">05</div>
+        <div class="phase-name">SNAPSHOT</div>
+        <div class="phase-desc">Serialize state ke deterministic snapshot untuk replay</div>
+      </div>
+    </div>
+
+    <div class="code-block">
+<span class="comment">// xenor-xenus phase execution — ditampilkan live di game UI</span>
+<span class="keyword">pub trait</span> <span class="type">Phase</span> {
+    <span class="keyword">fn</span> execute(&self, state: &<span class="keyword">mut</span> <span class="type">GameState</span>) -> <span class="type">PhaseResult</span>;
+    <span class="keyword">fn</span> name(&self) -> &<span class="keyword">str</span>;
+    <span class="keyword">fn</span> order(&self) -> <span class="type">u32</span>;  <span class="comment">// determinism-critical: must never change</span>
+}
+
+<span class="comment">// Game UI polls phase progress dan animasikan tiap phase saat execute</span>
+<span class="keyword">pub fn</span> run_cycle(state: &<span class="keyword">mut</span> <span class="type">GameState</span>, phases: &[<span class="keyword">Box</span>&lt;<span class="keyword">dyn</span> <span class="type">Phase</span>&gt;]) {
+    <span class="keyword">for</span> phase <span class="keyword">in</span> phases.iter() {
+        state.current_phase = phase.name().to_string();
+        phase.execute(state);  <span class="comment">// UI di-notify setiap step ini</span>
+    }
+    state.tick += 1;
+    state.snapshot();  <span class="comment">// deterministic snapshot untuk replay</span>
+}
+    </div>
+  </div>
+
+  <!-- BUILDINGS -->
+  <div class="section">
+    <div class="section-label">04 // BUILDINGS</div>
+    <div class="section-title">BUILDING ROSTER (v1)</div>
+
+    <div class="building-grid">
+      <div class="building-card">
+        <span class="building-icon">⬡</span>
+        <div class="building-name">NODE_CORE</div>
+        <div class="building-stat">+2 NODES/tick<br>Base building</div>
+      </div>
+      <div class="building-card">
+        <span class="building-icon">▣</span>
+        <div class="building-name">ENERGY_CELL</div>
+        <div class="building-stat">+4 ENERGY/tick<br>Powers others</div>
+      </div>
+      <div class="building-card">
+        <span class="building-icon">◈</span>
+        <div class="building-name">RELAY_TOWER</div>
+        <div class="building-stat">+1 NODES boost<br>Adjacency bonus</div>
+      </div>
+      <div class="building-card">
+        <span class="building-icon">⬖</span>
+        <div class="building-name">VAULT</div>
+        <div class="building-stat">+8 storage cap<br>Prevents overflow</div>
+      </div>
+      <div class="building-card">
+        <span class="building-icon">⬠</span>
+        <div class="building-name">MINER</div>
+        <div class="building-stat">+3 TOKENS/tick<br>Needs ENERGY</div>
+      </div>
+      <div class="building-card">
+        <span class="building-icon">◉</span>
+        <div class="building-name">HOUSING</div>
+        <div class="building-stat">+5 POPULATION<br>Needs ENERGY+NODE</div>
+      </div>
+      <div class="building-card">
+        <span class="building-icon">⬡</span>
+        <div class="building-name">SHIELD_NODE</div>
+        <div class="building-stat">Blocks EVENT<br>attack phase</div>
+      </div>
+      <div class="building-card">
+        <span class="building-icon">◬</span>
+        <div class="building-name">PROTOCOL_HUB</div>
+        <div class="building-stat">Unlock condition<br>Final building</div>
+      </div>
+    </div>
+
+    <div class="highlight-block">
+      <div class="hl-label">// DETERMINISM NOTE</div>
+      <p>Semua building stats di-define sebagai <strong>pure functions</strong> — tidak ada randomness di production phase. Randomness hanya di EVENT phase, dan itu pun seed-driven. Artinya: <strong>replay dengan seed yang sama = hasil identik sampai tick manapun.</strong></p>
+    </div>
+  </div>
+
+  <!-- TECH STACK -->
+  <div class="section">
+    <div class="section-label">05 // TECH STACK</div>
+    <div class="section-title">IMPLEMENTATION STACK</div>
+
+    <table class="tech-table">
+      <thead>
+        <tr>
+          <th>Layer</th>
+          <th>Technology</th>
+          <th>Peran dalam Game</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>CORE ENGINE</td>
+          <td>Rust + xenor-xenus</td>
+          <td>Game logic, phase execution, deterministic simulation — reuse langsung dari repo xenor-xenus</td>
+        </tr>
+        <tr>
+          <td>WASM BRIDGE</td>
+          <td>wasm-bindgen + wasm-pack</td>
+          <td>Compile Rust ke .wasm, expose GameState, run_cycle(), dan get_snapshot() ke JavaScript</td>
+        </tr>
+        <tr>
+          <td>RENDERER</td>
+          <td>React + TypeScript</td>
+          <td>Grid renderer, building placement UI, resource bars, phase progress indicator, seed input form</td>
+        </tr>
+        <tr>
+          <td>GRAPHICS</td>
+          <td>HTML5 Canvas / CSS Grid</td>
+          <td>Game grid pakai CSS Grid untuk simplicity. Animasi phase tick pakai Canvas overlay untuk particle effects</td>
+        </tr>
+        <tr>
+          <td>STATE SYNC</td>
+          <td>SharedArrayBuffer / JSON</td>
+          <td>WASM memory ↔ React state bridge. GameState di-serialize ke JSON setiap snapshot untuk React re-render</td>
+        </tr>
+        <tr>
+          <td>SEED HASHING</td>
+          <td>FNV-1a (pure Rust)</td>
+          <td>Convert text seed input → u64 hash deterministik. FNV-1a ringan, zero-dependency, consistent cross-platform</td>
+        </tr>
+        <tr>
+          <td>BUILD</td>
+          <td>Vite + wasm plugin</td>
+          <td>Bundle Rust WASM + React TS jadi single optimized bundle. Target: &lt;500KB gzipped untuk fast landing page load</td>
+        </tr>
+        <tr>
+          <td>HOSTING</td>
+          <td>Vercel / Cloudflare Pages</td>
+          <td>Static hosting, edge caching. WASM file served dengan correct Content-Type dan CORS headers</td>
+        </tr>
+        <tr>
+          <td>ANALYTICS</td>
+          <td>Plausible (optional)</td>
+          <td>Track: seeds yang paling sering dipakai, average session time, protocol_unlock conversion rate</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ARCHITECTURE -->
+  <div class="section">
+    <div class="section-label">06 // ARCHITECTURE</div>
+    <div class="section-title">SYSTEM ARCHITECTURE</div>
+
+    <div class="arch-box">
+      <div class="arch-header">
+        <span>XENUS_SETTLEMENT // SYSTEM LAYERS</span>
+        <span class="status"><div class="status-dot"></div>ACTIVE</span>
+      </div>
+      <div class="arch-content">
+
+        <div class="arch-layer">
+          <div class="arch-layer-label">RUST CORE</div>
+          <div class="arch-components">
+            <div class="arch-chip green">xenor-xenus/src/state.rs</div>
+            <div class="arch-chip green">phases.rs</div>
+            <div class="arch-chip green">building.rs</div>
+            <div class="arch-chip green">seed.rs</div>
+            <div class="arch-chip amber">wasm_bridge.rs (NEW)</div>
+          </div>
+        </div>
+
+        <div class="arch-arrow">⬇ wasm-bindgen exports ⬇</div>
+
+        <div class="arch-layer">
+          <div class="arch-layer-label">WASM API</div>
+          <div class="arch-components">
+            <div class="arch-chip amber">init_game(seed: u64)</div>
+            <div class="arch-chip amber">place_building(x, y, type)</div>
+            <div class="arch-chip amber">tick()</div>
+            <div class="arch-chip amber">get_state() → JSON</div>
+            <div class="arch-chip amber">reset()</div>
+          </div>
+        </div>
+
+        <div class="arch-arrow">⬇ JSON snapshot ⬇</div>
+
+        <div class="arch-layer">
+          <div class="arch-layer-label">REACT UI</div>
+          <div class="arch-components">
+            <div class="arch-chip cyan">SeedInput.tsx</div>
+            <div class="arch-chip cyan">GameGrid.tsx</div>
+            <div class="arch-chip cyan">PhaseIndicator.tsx</div>
+            <div class="arch-chip cyan">ResourceBar.tsx</div>
+            <div class="arch-chip cyan">BuildingPalette.tsx</div>
+          </div>
+        </div>
+
+        <div class="arch-arrow">⬇ embed via iframe / web component ⬇</div>
+
+        <div class="arch-layer">
+          <div class="arch-layer-label">LANDING PAGE</div>
+          <div class="arch-components">
+            <div class="arch-chip red">xenor.xyz (Next.js)</div>
+            <div class="arch-chip red">&lt;XenusGame seed="default" /&gt;</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="code-block">
+<span class="comment">// wasm_bridge.rs — file baru yang perlu ditambahkan ke xenor-xenus</span>
+<span class="keyword">use</span> wasm_bindgen::prelude::*;
+<span class="keyword">use crate</span>::{<span class="type">GameState</span>, <span class="type">Building</span>, run_cycle};
+
+<span class="keyword">#[wasm_bindgen]</span>
+<span class="keyword">pub struct</span> <span class="type">XenusGame</span> {
+    state: <span class="type">GameState</span>,
+    phases: <span class="type">Vec</span>&lt;<span class="type">Box</span>&lt;<span class="keyword">dyn</span> Phase&gt;&gt;,
+}
+
+<span class="keyword">#[wasm_bindgen]</span>
+<span class="keyword">impl</span> <span class="type">XenusGame</span> {
+    <span class="keyword">pub fn</span> new(seed: <span class="type">u64</span>) -> <span class="type">Self</span> { ... }
+    <span class="keyword">pub fn</span> tick(&<span class="keyword">mut</span> self) -> <span class="type">String</span> { <span class="comment">// returns JSON snapshot</span>
+        run_cycle(&<span class="keyword">mut</span> self.state, &self.phases);
+        serde_json::to_string(&self.state).unwrap()
+    }
+    <span class="keyword">pub fn</span> place(&<span class="keyword">mut</span> self, x: <span class="type">u32</span>, y: <span class="type">u32</span>, building_type: &<span class="type">str</span>) -> <span class="type">bool</span> { ... }
+    <span class="keyword">pub fn</span> reset(&<span class="keyword">mut</span> self) { <span class="comment">// reset ke seed awal — demo determinism</span> }
+}
+    </div>
+  </div>
+
+  <!-- UI DESIGN -->
+  <div class="section">
+    <div class="section-label">07 // UI DESIGN</div>
+    <div class="section-title">VISUAL DIRECTION</div>
+
+    <div class="concept-block">
+      <p>Visual game harus <strong>seamlessly match aesthetic xenor.xyz</strong> — terminal green-on-black, monospace fonts, grid lines, minimal UI. Game bukan distraksi dari landing page, tapi <strong>extension dari brand identity</strong>. Visitor yang buka xenor.xyz harus merasa game ini adalah bagian dari protocol, bukan game yang ditempelkan.</p>
+    </div>
+
+    <div class="overview-grid">
+      <div class="overview-cell">
+        <div class="label">Color Palette</div>
+        <div class="value"><strong>#00FF41</strong> primary · <strong>#040A06</strong> bg · <strong>#FFB800</strong> accent · <strong>#00FFCC</strong> info</div>
+      </div>
+      <div class="overview-cell">
+        <div class="label">Typography</div>
+        <div class="value"><strong>Share Tech Mono</strong> (system text) · <strong>Orbitron</strong> (headers/numbers)</div>
+      </div>
+      <div class="overview-cell">
+        <div class="label">Grid Style</div>
+        <div class="value">1px green-dim lines, <strong>cell glow</strong> saat hover, building tiles pakai ASCII-art inspired icons</div>
+      </div>
+      <div class="overview-cell">
+        <div class="label">Animations</div>
+        <div class="value">Phase tick: <strong>scanline sweep</strong>. Resource flow: <strong>particle trails</strong>. Protocol unlock: <strong>cascade glitch</strong></div>
+      </div>
+    </div>
+
+    <div class="highlight-block">
+      <div class="hl-label">// SEED VISUALIZER UX</div>
+      <p>Seed input field pakai style terminal: <strong>blinking cursor</strong>, typewriter animation saat user input. Submit → grid animate "GENERATING FROM SEED..." dengan progress bar deterministik, lalu bangunan spawn satu per satu sesuai seed. Kalau dua tab dibuka dengan seed sama → <strong>hasilnya pixel-perfect identik</strong>. Ini adalah WOW moment yang demonstrate core value protokol.</p>
+    </div>
+  </div>
+
+  <!-- ROADMAP -->
+  <div class="section">
+    <div class="section-label">08 // ROADMAP</div>
+    <div class="section-title">IMPLEMENTATION PLAN</div>
+
+    <div class="roadmap">
+      <div class="roadmap-item">
+        <div class="roadmap-dot wip"></div>
+        <div class="roadmap-phase">PHASE 01 — WASM FOUNDATION</div>
+        <div class="roadmap-title">WASM BRIDGE + BASIC LOOP</div>
+        <ul class="task-list">
+          <li>Tambah wasm_bridge.rs ke xenor-xenus</li>
+          <li>Setup wasm-pack build pipeline di Cargo.toml</li>
+          <li>Expose: init_game, tick, place_building, get_state, reset</li>
+          <li>Test deterministik: 2 instance dengan seed yang sama → identical JSON</li>
+          <li>Estimasi: 3–5 hari</li>
+        </ul>
+      </div>
+
+      <div class="roadmap-item">
+        <div class="roadmap-dot"></div>
+        <div class="roadmap-phase">PHASE 02 — REACT SHELL</div>
+        <div class="roadmap-title">GAME UI COMPONENTS</div>
+        <ul class="task-list">
+          <li>SeedInput component dengan terminal aesthetic</li>
+          <li>GameGrid component — CSS Grid 12×12, click-to-place</li>
+          <li>BuildingPalette component — side panel</li>
+          <li>ResourceBar component — ENERGY / NODES / TOKENS display</li>
+          <li>Estimasi: 5–7 hari</li>
+        </ul>
+      </div>
+
+      <div class="roadmap-item">
+        <div class="roadmap-dot"></div>
+        <div class="roadmap-phase">PHASE 03 — PHASE VISUAL</div>
+        <div class="roadmap-title">PHASE SYSTEM VISUALIZATION</div>
+        <ul class="task-list">
+          <li>PhaseIndicator component — progress bar per phase</li>
+          <li>Phase tick animation: scanline effect saat phase berjalan</li>
+          <li>Resource particle trails antar bangunan</li>
+          <li>Snapshot replay UI — tombol reset + replay counter</li>
+          <li>Estimasi: 4–6 hari</li>
+        </ul>
+      </div>
+
+      <div class="roadmap-item">
+        <div class="roadmap-dot"></div>
+        <div class="roadmap-phase">PHASE 04 — POLISH + INTEGRATION</div>
+        <div class="roadmap-title">LANDING PAGE EMBED</div>
+        <ul class="task-list">
+          <li>Protocol unlock sequence animation</li>
+          <li>CTA: "Full game → xenor-xenus" conversion flow</li>
+          <li>Share seed functionality (copy link with ?seed= param)</li>
+          <li>Embed sebagai Web Component atau iframe di xenor.xyz</li>
+          <li>Bundle optimization: target &lt;500KB gzipped</li>
+          <li>Estimasi: 3–4 hari</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="highlight-block">
+      <div class="hl-label">// TOTAL ESTIMATE</div>
+      <p>Total development estimate: <strong>15–22 hari (solo developer)</strong>. Phase 01 adalah yang paling kritikal — kalau WASM bridge bisa berjalan dan deterministik terbukti, Phase 02–04 adalah pure frontend work. Bisa paralel dikerjakan dengan development xenor-xenus utama karena game hanya <strong>consume</strong> xenor-xenus via API, tidak modifikasi core.</p>
+    </div>
+  </div>
+
+  <!-- FILES -->
+  <div class="section">
+    <div class="section-label">09 // FILE STRUCTURE</div>
+    <div class="section-title">PROJECT LAYOUT</div>
+
+    <div class="code-block">
+xenor-xenus/
+├── src/
+│   ├── state.rs           <span class="comment"># existing — GameState struct</span>
+│   ├── phases.rs          <span class="comment"># existing — Phase trait + implementations</span>
+│   ├── building.rs        <span class="comment"># existing — Building struct</span>
+│   └── wasm_bridge.rs     <span class="comment"># NEW — wasm-bindgen exports untuk game</span>
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── SeedInput.tsx
+│   │   │   ├── GameGrid.tsx
+│   │   │   ├── BuildingPalette.tsx
+│   │   │   ├── PhaseIndicator.tsx
+│   │   │   └── ResourceBar.tsx
+│   │   ├── hooks/
+│   │   │   ├── useWasm.ts     <span class="comment"># WASM loading + initialization</span>
+│   │   │   └── useGameLoop.ts <span class="comment"># requestAnimationFrame game loop</span>
+│   │   ├── types/
+│   │   │   └── game.ts        <span class="comment"># TypeScript types untuk GameState JSON</span>
+│   │   └── App.tsx
+│   ├── public/
+│   │   └── xenus_bg.wasm      <span class="comment"># compiled dari Rust</span>
+│   └── vite.config.ts
+└── Cargo.toml             <span class="comment"># tambahkan wasm-bindgen feature flag</span>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-brand">XENØr // CONCEPT_DOC_v1.0</div>
+    <div class="footer-info">xenor.xyz // xenor-xenus // april 2026</div>
+  </div>
+
+</div>
+</body>
+</html>
