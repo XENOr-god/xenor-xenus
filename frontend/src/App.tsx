@@ -5,7 +5,6 @@ import { initializeWasm } from "./wasm/init";
 import { GameGrid } from "./components/GameGrid";
 import { BuildingPalette } from "./components/BuildingPalette";
 import { ResourceBar } from "./components/ResourceBar";
-import { PhaseIndicator } from "./components/PhaseIndicator";
 import { SeedInput } from "./components/SeedInput";
 import "./styles/theme.css";
 import "./styles/App.css";
